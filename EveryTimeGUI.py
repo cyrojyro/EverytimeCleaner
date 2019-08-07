@@ -10,7 +10,7 @@ submitBtnName = 'submit'
 myArticleURL = 'myarticle'
 myCommentURL = "mycommentarticle"
 articleName = 'article'
-deleteBtnText = '삭제'
+deleteBtn = 'li.del'
 
 driver = None
 
@@ -20,7 +20,7 @@ class Ui_mainWindow(object):
         self.mainWindow = mainWindow
 
         mainWindow.setObjectName("mainWindow")
-        mainWindow.resize(492, 402)
+        mainWindow.resize(492, 400)
 
         font = QtGui.QFont()
         font.setFamily("맑은 고딕 Semilight")
@@ -38,10 +38,6 @@ class Ui_mainWindow(object):
         self.pwEdit = QtWidgets.QLineEdit(self.centralwidget)
         self.pwEdit.setGeometry(QtCore.QRect(150, 160, 181, 31))
         self.pwEdit.setObjectName("pwEdit")
-
-        self.schoolText = QtWidgets.QLineEdit(self.centralwidget)
-        self.schoolText.setGeometry(QtCore.QRect(150, 210, 121, 31))
-        self.schoolText.setObjectName("schoolText")
 
         self.loginBtn = QtWidgets.QPushButton(self.centralwidget)
         self.loginBtn.setGeometry(QtCore.QRect(360, 100, 101, 41))
@@ -113,31 +109,22 @@ class Ui_mainWindow(object):
         self.delayLabel.setObjectName("delayLabel")
 
         self.textBrowser = QtWidgets.QTextBrowser(self.centralwidget)
-        self.textBrowser.setGeometry(QtCore.QRect(30, 270, 221, 91))
+        self.textBrowser.setGeometry(QtCore.QRect(30, 220, 251, 101))
         self.textBrowser.setObjectName("textBrowser")
 
         self.articleDelBtn = QtWidgets.QPushButton(self.centralwidget)
-        self.articleDelBtn.setGeometry(QtCore.QRect(290, 220, 161, 41))
+        self.articleDelBtn.setGeometry(QtCore.QRect(300, 220, 161, 41))
         self.articleDelBtn.setObjectName("articleDelBtn")
         self.articleDelBtn.clicked.connect(self.onClickArticleDelBtn)
 
         self.commentDelBtn = QtWidgets.QPushButton(self.centralwidget)
-        self.commentDelBtn.setGeometry(QtCore.QRect(290, 280, 161, 41))
+        self.commentDelBtn.setGeometry(QtCore.QRect(300, 280, 161, 41))
         self.commentDelBtn.setObjectName("commentDelBtn")
         self.commentDelBtn.clicked.connect(self.onClickCommentDelBtn)
-
-        self.schoolLabel = QtWidgets.QLabel(self.centralwidget)
-        self.schoolLabel.setGeometry(QtCore.QRect(20, 210, 111, 31))
 
         font = QtGui.QFont()
         font.setFamily("Agency FB")
         font.setPointSize(14)
-
-        self.schoolLabel.setFont(font)
-        self.schoolLabel.setLineWidth(0)
-        self.schoolLabel.setTextFormat(QtCore.Qt.RichText)
-        self.schoolLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.schoolLabel.setObjectName("schoolLabel")
 
         mainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(mainWindow)
@@ -160,24 +147,23 @@ class Ui_mainWindow(object):
         mainWindow.setWindowTitle(_translate("mainWindow", "에브리타임 클리너"))
         self.helpBtn.setText(_translate("mainWindow", "도움말"))
         self.loginBtn.setText(_translate("mainWindow", "로그인"))
-        self.mainLabel.setText(_translate("mainWindow", "에브리타임 클리너 V0.2"))
+        self.mainLabel.setText(_translate("mainWindow", "에브리타임 클리너 V0.3"))
         self.idLabel.setText(_translate("mainWindow", "아이디"))
         self.pwLabel.setText(_translate("mainWindow", "패스워드"))
-        self.delayEdit.setText(_translate("mainWindow", "0.5"))
+        self.delayEdit.setText(_translate("mainWindow", "0.3"))
         self.delayLabel.setText(_translate("mainWindow", "삭제 딜레이"))
         self.articleDelBtn.setText(_translate("mainWindow", "글 삭제"))
         self.commentDelBtn.setText(_translate("mainWindow", "댓글 삭제"))
-        self.schoolLabel.setText(_translate("mainWindow", "학교코드"))
 
     def initializeUi(self):
         self.mainWindow.setWindowState(
             self.mainWindow.windowState() & ~QtCore.Qt.WindowMinimized | QtCore.Qt.WindowActive)
         self.articleDelBtn.setEnabled(False)
         self.commentDelBtn.setEnabled(False)
-        self.textBrowser.setText("학교 코드 (xxx.everytime.kr에서 xxx), 아이디, 비밀번호를 입력하여 로그인 해주세요.")
+        self.textBrowser.setText("에브리타임 아이디, 비밀번호를 입력하여 로그인해주세요.")
 
     def onClickHelpBtn(self):
-        self.throwMessage('에브리타임 클리너 V0.2\n제작자: cyrojyro')
+        self.throwMessage('에브리타임 클리너 V0.3\n제작자: cyrojyro\nURL: https://github.com/cyrojyro/Everytime-Cleaner')
 
     def onClickLoginBtn(self):
         self.loginBtn.setEnabled(False)
@@ -190,36 +176,35 @@ class Ui_mainWindow(object):
             self.throwMessage('클리너를 사용하기 위해서는 구글 크롬과, C:\ 경로에 크롬과 버전이 일치하는 \'chromeDriver.exe 파일\'이 필요합니다.'
                             '\nhttps://chromedriver.chromium.org/downloads에서 \'chromeDriver.exe 파일\'을 다운로드 받으실 수 있습니다.')
 
-        school = self.schoolText.text()
-        try:
-            driver.get('https://' + school + '.everytime.kr/login')
-        except:
-            pass
-
-        # 로그인
-        id = driver.find_element_by_name(idTextBoxName)
-        id.clear()
-        id.send_keys(self.idEdit.text())
-        pw = driver.find_element_by_name(pwTextBoxName)
-        pw.send_keys(self.pwEdit.text())
+        driver.get('https://everytime.kr/login')
+        idTextBox = driver.find_element_by_name(idTextBoxName)
+        idTextBox.send_keys(self.idEdit.text())
+        pwTextBox = driver.find_element_by_name(pwTextBoxName)
+        pwTextBox.send_keys(self.pwEdit.text())
         submit = driver.find_element_by_class_name(submitBtnName)
         submit.click()
         self.mainWindow.activateWindow()
-        self.textBrowser.setText("글 삭제/ 댓글 삭제 버튼을 눌러 삭제하세요. 인터넷 속도와 컴퓨터 성능에 따라 딜레이를 조절하세요.")
-        self.idEdit.setEnabled(False)
-        self.pwEdit.setEnabled(False)
-        self.schoolText.setEnabled(False)
-        self.articleDelBtn.setEnabled(True)
-        self.commentDelBtn.setEnabled(True)
 
+        #로그인 결과 핸들링
+        loginSuccess = True
         try:
             alert = driver.switch_to.alert
             alert.accept()
             driver.close()
             self.throwMessage('로그인에 실패하였습니다.')
+            loginSuccess = False
+            self.idEdit.setEnabled(True)
+            self.pwEdit.setEnabled(True)
             self.loginBtn.setEnabled(True)
         except:
             pass
+
+        if loginSuccess:
+            self.textBrowser.setText("글 삭제/ 댓글 삭제 버튼을 눌러 삭제하세요. 인터넷 속도와 컴퓨터 성능에 따라 딜레이를 조절하세요.")
+            self.idEdit.setEnabled(False)
+            self.pwEdit.setEnabled(False)
+            self.articleDelBtn.setEnabled(True)
+            self.commentDelBtn.setEnabled(True)
 
     def onClickArticleDelBtn(self):
         self.textBrowser.setText("글 삭제중...")
@@ -228,26 +213,23 @@ class Ui_mainWindow(object):
 
         delay = float(self.delayEdit.text())
         while True:
-            school = self.schoolText.text()
-            driver.get('https://' + school + '.everytime.kr/' + myArticleURL)
+            driver.get('https://everytime.kr/' + myArticleURL)
             time.sleep(delay)
             article = driver.find_element_by_class_name(articleName)
             article.click()
             time.sleep(delay)
-            article = driver.find_element_by_class_name(articleName)
-            status = article.find_element_by_tag_name('ul')
-            li_list = status.find_elements_by_tag_name('li')
-            for li in li_list:
-                if li.text == deleteBtnText:
-                    driver.execute_script("arguments[0].click();", li)
-                    break
+
+            #앞부터 삭제
+            lis = driver.find_elements_by_css_selector(deleteBtn)
+            if len(lis):
+                driver.execute_script("arguments[0].click();", lis[0])
 
             try:
                 alert = driver.switch_to.alert
                 alert.accept()
             except:
                 self.mainWindow.activateWindow()
-                self.textBrowser.setText("글 삭제 완료.")
+                self.textBrowser.setText("글 삭제 완료.\n삭제가 제대로 되지 않으면, 딜레이를 늘려 주세요.")
                 break
 
         self.mainWindow.activateWindow()
@@ -261,32 +243,23 @@ class Ui_mainWindow(object):
 
         delay = float(self.delayEdit.text())
         while True:
-            school = self.schoolText.text()
-            driver.get('https://' + school + '.everytime.kr/' + myCommentURL)
+            driver.get('https://everytime.kr/' + myCommentURL)
             time.sleep(delay)
             article = driver.find_element_by_class_name(articleName)
             article.click()
             time.sleep(delay)
-            comments = driver.find_elements_by_class_name(articleName)
-            flag = False
 
-            # 삭제 가능한 댓글 탐색
-            for comment in comments:
-                if flag:
-                    break
-                li_list = comment.find_elements_by_tag_name('li')
-                for li in li_list:
-                    if li.text == deleteBtnText:
-                        driver.execute_script("arguments[0].click();", li)
-                        flag = True
-                        break
+            #뒤부터 삭제
+            lis = driver.find_elements_by_css_selector(deleteBtn)
+            if len(lis):
+                driver.execute_script("arguments[0].click();", lis[-1])
 
             try:
                 alert = driver.switch_to.alert
                 alert.accept()
             except:
                 self.mainWindow.activateWindow()
-                self.textBrowser.setText("댓글 삭제 완료.")
+                self.textBrowser.setText("댓글 삭제 완료.\n삭제가 제대로 되지 않으면, 딜레이를 늘려 주세요.")
                 break
 
         self.mainWindow.activateWindow()
