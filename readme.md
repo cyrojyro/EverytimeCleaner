@@ -1,6 +1,7 @@
 ﻿에브리타임 클리너
 ======
-  
+
+#### 간단한 조작으로 그동한 작성했던 수십, 수백개의 글, 댓글을 전부 지워줍니다.
 #### 에브리타임 클리너를 사용하기 위해서는 'Google Chrome'과, C 드라이브에 'chromeDriver.exe 파일'이 필요합니다.
 
 * EveryTimeCleaner폴더의 EveryTimeCleaner.exe 폴더로 실행합니다. 
