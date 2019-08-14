@@ -11,6 +11,7 @@
 * EveryTimeCleaner폴더의 EveryTimeCleaner.exe 폴더로 실행합니다. 
 * 크롬 브라우저와 크롬 드라이버 파일의 버전이 일치해야 동작합니다.
 * 크롬 드라이버는 https://chromedriver.chromium.org/downloads 에서 다운로드하실 수 있습니다.
+* 크롬 드라이버는 반드시 C:\ 경로(C 드라이브)에 있어야 합니다.
 
 <br/><br/>
 
